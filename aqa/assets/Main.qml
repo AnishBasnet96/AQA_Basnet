@@ -219,9 +219,9 @@ ApplicationWindow
 
         color:  win.color
 
-        property real startX: win.width - (properties.margins*8)
+        property real startX: win.width - (properties.margins*6)
         property real startY: properties.margins + 10
-        property real endX: win.width * 0.4
+        property real endX: win.width * 0.6
         property real endY: properties.margins*15
 
         x: startX
@@ -254,6 +254,7 @@ ApplicationWindow
             fillMode: Image.PreserveAspectFit
             anchors.verticalCenter:  parent.verticalCenter
             smooth: true
+            color: win.iconTextColor
         }
 
         ParallelAnimation
@@ -282,8 +283,8 @@ ApplicationWindow
             NumberAnimation {
                 target: iconScale
                 property: "xScale"
-                from: rightIconWrap.reverse? 1.0 : 0.5
-                to: rightIconWrap.reverse? 0.5 : 1
+                from: rightIconWrap.reverse? 1.5 : 0.5
+                to: rightIconWrap.reverse? 0.5 : 1.5
                 duration: properties.timing
                 easing.type: Easing.InOutQuad
             }
@@ -315,6 +316,46 @@ ApplicationWindow
         readonly property string healingText: "Start healing"
         readonly property string stopText: "Stop"
 
+        property real startX: topBar.x
+        property real startY: properties.margins*17
+        property real endY: topBar.height*1.5
+
+        x: startX
+        y: startY
+
+        transform:
+            [
+            Translate
+            {
+                id: startTranslate
+                x: 0
+                y: (starStopButton.endY - starStopButton.startY) * animT
+
+                Behavior on y
+                {
+                    NumberAnimation
+                    {
+                        duration: properties.timing
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+        ]
+
+        width: 240 - (120 * animT)
+
+        Behavior on width
+        {
+            NumberAnimation
+            {
+                duration: properties.timing
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+
+        height: 72
+
         iconSource: icons.play
         text: healingText
 
@@ -324,12 +365,19 @@ ApplicationWindow
             {
                 core.startHealing()
                 starStopButton.text = stopText;
+                ageGroupColumn.visible = false;
+                favoritePlanetColumn.visible = false;
+                starStopButton.iconSource = icons.hand
+
             }
             else
             {
                 core.stopHealing()
                 starStopButton.text = healingText;
+                starStopButton.iconSource = icons.play
                 rightIconWrap.reverse = true;
+                ageGroupColumn.visible = true;
+                favoritePlanetColumn.visible = true;
             }
         }
     }
