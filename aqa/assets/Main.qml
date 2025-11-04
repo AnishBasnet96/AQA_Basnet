@@ -304,6 +304,114 @@ ApplicationWindow
         }
     }
 
+
+    Rectangle
+    {
+        id: bottom
+        anchors.left: parent.left
+        anchors.leftMargin: - (properties.margins*4)
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: - (properties.margins*7)
+
+        color: "transparent"
+
+        property real baseSize: Math.min(win.width, win.height ) * 0.7
+
+        width: baseSize
+        height: baseSize
+
+
+        property real pulseAmp: 0.3* animT
+
+        property bool breathing: animT > 0
+
+        onBreathingChanged:
+        {
+
+        }
+
+        onPulseAmpChanged:
+        {
+
+        }
+
+
+        Item
+        {
+            id: iconHolder
+            anchors.centerIn: parent
+            width: parent.width
+            height: parent.height
+
+            transform:[
+
+                Scale
+                {
+                    id: scale
+                    xScale: 1.0
+                    yScale: 1.0
+                    origin.x: iconHolder.width/2;
+                    origin.y: iconHolder.width/2
+                }
+            ]
+
+            IconImage
+            {
+                anchors.fill: parent
+                source:  bottomIcon(core.age)
+                fillMode: Image.PreserveAspectFit
+                anchors.verticalCenter:  parent.verticalCenter
+                smooth: true
+                color: bottomTint(core.age)
+            }
+
+            SequentialAnimation
+            {
+                loops: Animation.Infinite
+                running: animT > 0
+                PauseAnimation {
+                    duration: properties.timing
+
+                }
+                NumberAnimation {
+                    target: scale
+                    property: "xScale"
+                    from: 1.0
+                    to: 1.0 - bottom.pulseAmp
+                    duration: properties.timing
+                    easing.type: Easing.InOutQuad
+                }
+                PauseAnimation {
+                    duration: properties.timing
+
+                }
+                NumberAnimation {
+                    target: scale
+                    property: "xScale"
+                    from: 1.0 - bottom.pulseAmp
+                    to: 1
+                    duration: properties.timing
+                    easing.type: Easing.InOutQuad
+                }
+                PauseAnimation {
+                    duration: properties.timing
+
+                }
+            }
+
+            Binding
+            {
+                target: scale
+                property: "yScale"
+                when: scale.xScale
+                restoreMode: Binding.RestoreBinding
+            }
+        }
+
+    }
+
+
+
     BaseButton
     {
         id: starStopButton
