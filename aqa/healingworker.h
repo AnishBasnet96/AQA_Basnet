@@ -9,7 +9,15 @@ class HealingWorker : public QObject
 public:
     explicit HealingWorker(QObject *parent = nullptr);
 
+public slots:
+    void startHealing();
+    void stopHealing();
+
 signals:
+    void finished();
+
+private:
+    bool m_stop{false};
 };
 
 #endif // HEALINGWORKER_H
