@@ -1,0 +1,1 @@
+# README – Asynchronous Qt Assignment
