@@ -7,9 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-
 
 qt_add_executable(appaqa
     main.cpp
@@ -20,13 +17,13 @@ qt_add_executable(appaqa
 target_link_libraries(appaqa
     PRIVATE Qt6::Quick
 )
-target_link_libraries(appaqa PRIVATE Qt6::Core)
-target_link_libraries(appaqa PRIVATE Qt6::Core)
 
 qt_add_resources(appaqa "appaqa_qml"
 PREFIX "/"
 FILES
 assets/Main.qml
+assets/BaseButton.qml
+
 icons/lungs.svg
 icons/futbol.svg
 icons/leaf.svg

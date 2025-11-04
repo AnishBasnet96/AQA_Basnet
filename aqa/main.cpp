@@ -21,7 +21,6 @@ int main(int argc, char *argv[])
                 QCoreApplication::exit(-1);
         },
         Qt::QueuedConnection);
-    engine.load(url);
 
     QQmlContext* rootContext = engine.rootContext();
 
@@ -30,5 +29,6 @@ int main(int argc, char *argv[])
         rootContext->setContextProperty("core", &core);
     }
 
+    engine.load(url);
     return app.exec();
 }
