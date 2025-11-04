@@ -210,4 +210,127 @@ ApplicationWindow
         }
     }
 
+    Rectangle
+    {
+        id: rightIconWrap
+
+        width:  properties.margins * 8
+        height: properties.margins * 8
+
+        color:  win.color
+
+        property real startX: win.width - (properties.margins*8)
+        property real startY: properties.margins + 10
+        property real endX: win.width * 0.4
+        property real endY: properties.margins*15
+
+        x: startX
+        y: startY
+
+        property bool reverse: false
+
+        transform:
+            [
+            Translate
+            {
+                id: iconTranslate
+                x: 0
+                y: 0
+            },
+            Scale
+            {
+                id: iconScale
+                xScale: 0.5
+                yScale: 0.5
+                origin.x: rightIconWrap.width/2;
+                origin.y: rightIconWrap.width/2
+            }
+        ]
+
+        IconImage
+        {
+            anchors.fill: parent
+            source:  ageIcon(core.age)
+            fillMode: Image.PreserveAspectFit
+            anchors.verticalCenter:  parent.verticalCenter
+            smooth: true
+        }
+
+        ParallelAnimation
+        {
+            loops: 1
+            running: animT > 0 || rightIconWrap.reverse
+
+            NumberAnimation {
+                target: iconTranslate
+                property: "x"
+                from: rightIconWrap.reverse? rightIconWrap.endX - rightIconWrap.startX:  0
+                to: rightIconWrap.reverse? 0: rightIconWrap.endX - rightIconWrap.startX
+                duration: properties.timing
+                easing.type: Easing.InOutQuad
+            }
+
+            NumberAnimation {
+                target: iconTranslate
+                property: "y"
+                from: rightIconWrap.reverse? rightIconWrap.endY - rightIconWrap.startY:  0
+                to: rightIconWrap.reverse? 0: rightIconWrap.endY - rightIconWrap.startY
+                duration: properties.timing
+                easing.type: Easing.InOutQuad
+            }
+
+            NumberAnimation {
+                target: iconScale
+                property: "xScale"
+                from: rightIconWrap.reverse? 1.0 : 0.5
+                to: rightIconWrap.reverse? 0.5 : 1
+                duration: properties.timing
+                easing.type: Easing.InOutQuad
+            }
+
+            onStopped:
+            {
+                if (rightIconWrap.reverse) { rightIconWrap.reverse = false }
+            }
+        }
+
+        Binding
+        {
+            target: iconScale
+            property: "yScale"
+            when: iconScale.xScale
+            restoreMode: Binding.RestoreBinding
+        }
+    }
+
+    BaseButton
+    {
+        id: starStopButton
+        iconColor: win.iconTextColor
+        textColor: win.iconTextColor
+        faceColor: win.color
+        borderColor:  win.iconTextColor
+        fontText: fonts.buttonText
+
+        readonly property string healingText: "Start healing"
+        readonly property string stopText: "Stop"
+
+        iconSource: icons.play
+        text: healingText
+
+        onClicked:
+        {
+            if (text === healingText)
+            {
+                core.startHealing()
+                starStopButton.text = stopText;
+            }
+            else
+            {
+                core.stopHealing()
+                starStopButton.text = healingText;
+                rightIconWrap.reverse = true;
+            }
+        }
+    }
 }
