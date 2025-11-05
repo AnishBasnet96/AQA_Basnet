@@ -62,7 +62,7 @@ The assignment effectively evaluated both QML design principles and asynchronous
      
 # 4. Deployment (Packaging for Distribution)
 
-- "C:\Qt\6.7.3\mingw_64\bin\windeployqt6.exe" "C:\path\to\build\Desktop_Qt_6_7_3_MinGW_64_bit-Release\appaqa.exe"
+- "C:\Qt\6.7.3\mingw_64\bin\windeployqt6.exe" --qmldir "C:\path\to\aqa\assets" "C:\path\to\build\Desktop_Qt_6_7_3_MinGW_64_bit-Release\appaqa.exe"
 - This command copies all required Qt .dll and QML dependencies into the same directory as the executable.
 
 - The fully deployed application is included in: AQA_Basnet/dist/
